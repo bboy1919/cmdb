@@ -17,5 +17,6 @@ from app.lib.helper import model_serializable, err_list
 
 
 @web.route("/cmdb/access")
+@login_required
 def access_index():
     return render_template("access.html",info=session)

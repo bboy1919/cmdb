@@ -27,41 +27,24 @@ import json
 # dump = json.dumps(rpc_request, separators=(',', ':'))
 # print(dump)
 
-from zabbix_client import ZabbixServerProxy
+
+import json
 
 # s = ZabbixServerProxy('http://10.0.0.81/zabbix')
 # t = s.apiinfo.version()
 # print(t)
 
-class Test1(object):
+import nltk
 
+aa = r'''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>404</title>
+</head>
+<body>
+你的权限不足，请联系管理员......                                                                         
+</body>
+</html>'''
 
-    def __init__(self, obj):
-        print ("In __init__")
-        self.data = obj
-
-
-    def __str__(self):
-        print ("In __str__")
-        return str(self.data)
-
-
-    __repr__ = __str__
-
-
-    def get_attr(self):
-        print ("In getattr")
-        return self.data
-
-
-    def __getattr__(self, attr):
-        print("In __getattr__")
-        return getattr(self.data, attr)
-
-
-if __name__ == '__main__':
-    myString = Test1('hello')
-    print (myString)
-    print (myString.upper())
-    print (myString.get_attr())
-
+print (nltk.clean_html(aa))

@@ -19,12 +19,13 @@ def model_serializable(o):
     keys = o.keys()
     for key in keys:
         # print(type(o[key]))
-        if not o[key]:
-            res[key] = ""
-        elif isinstance(o[key],date):
+
+        if isinstance(o[key],date):
             res[key] = datetime.strftime(o[key], "%Y-%m-%d")
         elif isinstance(o[key],int) or isinstance(o[key],str):
             res[key] = o[key]
+        elif not o[key]:
+            res[key] = ""
         elif isinstance(o[key],list):
             res[key] = [model_serializable(item) for item in o[key]]
         else:

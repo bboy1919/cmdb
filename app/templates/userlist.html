@@ -199,8 +199,30 @@
 
 {% block js %}
 
+$(function(){
+    $.ajaxSetup({
+        error: function(jqXHR, textStatus, errorThrown) {
+            switch(jqXHR.status) {
+              case(500):
+                swal("error", "服务器系统内部错误","error")
+                break;
+              case(401):
+                swal("error", "未登录","error")
+                break;
+               case(403):
+                swal("error", "没有权限操作","error")
+                break;
+               case(408):
+                swal("error", "请求超时","error")
+                break;
+              default:
+                swal("error", "未知错误","error")
+             }
 
-name='user'
+        }
+   });
+});
+
 function datatable(){
     $('#datatable').DataTable({
         "language": {
@@ -221,8 +243,8 @@ function datatable(){
 };
 /* list all data*/
 function list(){
-    url = "/user/userlist"
-    $.post(url,function(data){
+    url = "/user/userinfo"
+    $.get(url,function(data){
 
        if (data['code']== 0){       
            var str = ''
@@ -349,10 +371,9 @@ $('#ChangePasswdForm').on('submit',function(){
 /*点击按钮，显示更新用户模态窗,并获取用户的信息*/
 $("tbody").on('click','.update-btn',function(){
     var sid = $(this).attr('data-id')
-    var str ={'id':sid}
-    var url = "/user/changeuserinfo"
-    $.post(url,JSON.stringify(str),function(data){
-     // console.log(data)
+    var url = "/user/changeuserinfo?id="+sid
+    $.get(url,function(data){
+     console.log(data)
       if (data['code']==0){
           $('#upid').val(data['result']['id'])
           $('#upusername').val(data['result']['username'])

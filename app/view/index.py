@@ -32,7 +32,7 @@ def index():
     session['user'] = u_res  # 用户信息存入session
     session['role'] = list(role_l.keys())  # 角色名eg:['sa','php']
     session['perm'] = list(perm_l.keys())  # 权限名eg:['git','mysql']
-    session['username'] = user.name if user.name else user.username
+    session['username'] = user.username
     u_res["role"] = ",".join(list(role_l.values()))
     u_res["perm"] = ','.join(['<a href="%s" style="color:blue">%s</a>' % (x.url, x.name_cn) for x in per])
 
@@ -71,4 +71,5 @@ def change_self_info():
 @login_required
 def logout():
     logout_user()
+    session.clear()
     return redirect(url_for('web.login'))

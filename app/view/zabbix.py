@@ -7,6 +7,7 @@
  @Desc  :
 """
 from flask import render_template, request, json, session
+from flask_login import login_required
 
 from app.lib.re_data import data_return
 from . import web
@@ -14,10 +15,12 @@ from app.lib.helper import model_serializable
 from app.lib.zabbix_api import *
 
 @web.route("/zabbix/jigui")
+@login_required
 def zabbix_jigui():
     return render_template("jigui.html", info=session)
 
 @web.route("/zabbix/getjigui")
+@login_required
 def get_jigui():
     res = []
     server_list = Server.query.all()
@@ -29,10 +32,12 @@ def get_jigui():
     return data_return(result=res)
 
 @web.route("/zabbix/template")
+@login_required
 def zabbix_template():
     return render_template("template.html" ,info=session)
 
 @web.route("/zabbix/maintenance")
+@login_required
 def zabbix_maintenance():
     return render_template("maintenance.html",  info=session)
 

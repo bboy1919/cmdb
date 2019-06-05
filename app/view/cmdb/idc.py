@@ -7,6 +7,7 @@
  @Desc  :
 """
 from flask import render_template, session, request
+from flask_login import login_required
 
 from app import db
 from app.form.idc import IdcForm, UpdateIdcForm
@@ -17,11 +18,13 @@ from app.lib.helper import model_serializable, err_list
 
 
 @web.route("/cmdb/idc")
+@login_required
 def idc_index():
     return render_template("idc.html",info=session)
 
 
 @web.route("/cmdb/getidc", methods=["POST"])
+@login_required
 def get_idc():
     res = []
     idc_list = Idc.query.all()
@@ -31,6 +34,7 @@ def get_idc():
 
 
 @web.route("/cmdb/addidc", methods=["POST"])
+@login_required
 def create_idc():
     res = IdcForm(request.form)
     if res.validate():
@@ -45,6 +49,7 @@ def create_idc():
 
 
 @web.route("/cmdb/updateidc", methods=["GET","POST"])
+@login_required
 def update_idc():
     if request.method == "GET":
         id = request.args.get("id")
@@ -62,6 +67,7 @@ def update_idc():
 
 
 @web.route("/cmdb/delidc")
+@login_required
 def del_idc():
     id = request.args.get("id")
     del_idc_item = Idc.query.filter(Idc.id == id).first_or_404()

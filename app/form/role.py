@@ -15,7 +15,7 @@ from app.model.role import Role
 
 class UpdateRoleForm(Form):
     id = IntegerField()
-    name = StringField("角色名", validators=[DataRequired(message="角色名不可为空"), Length(min=3)])
+    name = StringField("角色名", validators=[DataRequired(message="角色名不可为空"), Length(min=2)])
     name_cn = StringField("中文名", validators=[DataRequired(message="中文名不可为空"), Length(min=2)])
     info = StringField()
     p_id = SelectMultipleField('permission', choices=[], coerce=int, option_widget=None)

@@ -9,8 +9,7 @@
 from flask import Flask
 from flask.json import JSONEncoder
 from flask_login import LoginManager
-from flask_cache import Cache
-from werkzeug.exceptions import HTTPException
+# from flask_cache import Cache
 
 from app.model import db
 
@@ -33,6 +32,8 @@ def register_blueprint(app):
 def create_app():
 
     app = Flask(__name__)
+
+    # app.wsgi_app = CasbinMiddleware(app.wsgi_app)
 
     app.config.from_object('conf.setting')
     app.config.from_object('conf.secret')

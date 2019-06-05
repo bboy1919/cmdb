@@ -16,8 +16,11 @@ class UpdatePermForm(Form):
     id = IntegerField()
     name = StringField("角色名", validators=[DataRequired(message="角色名不可为空"), Length(min=3)])
     name_cn = StringField("中文名", validators=[DataRequired(message="中文名不可为空"), Length(min=2)])
-    url = StringField("URL",validators=[URL(message="lllll")])
+    url = StringField("URL",validators=[DataRequired(message="url不可为空")])
     comment = StringField()
+
+
+class AddPermForm(UpdatePermForm):
 
     def validate_name(self, field):
         if Permission.query.filter(Permission.name == field.data).first():

@@ -1,21 +1,19 @@
 [[source]]
 name = "pypi"
-url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+url = "https://pypi.douban.com/simple"
 verify_ssl = true
 
 [dev-packages]
 
 [packages]
-flask = "*"
-flask-lgoin = "*"
+wtforms = "*"
 flask-sqlalchemy = "*"
-flask-wtf = "*"
-pymysql = "*"
-flask-login = "*"
-flask-cache = "*"
-flask-script = "*"
 flask-migrate = "*"
-zabbix-client = "*"
+flask-script = "*"
+flask = "*"
+flask-login = "*"
+casbin = "*"
+pymysql = "*"
 
 [requires]
 python_version = "3.7"

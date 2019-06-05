@@ -1,0 +1,26 @@
+p, anonymous, /, GET
+p, anonymous, /static/*, GET
+p, anonymous, /login, *
+p, anonymous, /logout, *
+p, cmdb, /cmdb/*, *
+p, zabbix, /zabbix/*, *
+p, maintain, /device/maintain/*, *
+p, maintain, /device/down/*, *
+p, cse, /user/*, *
+p, sa, /project/project/*, *
+p, sa, /cobbler/*, *
+p, sa, /zabbix/*, *
+p, sa, /show/*, *
+p, sa, /project/testing/*, *
+p, sa, /proect/apply/*, *
+p, sa, /proect/deploy/*, *
+p, sa, /cmdb/*, *
+p, sa, /user/*, *
+g, roote, sa
+g, roote, zabbix
+g, roote, maintain
+g, roote, anonymous
+g, admin, sa
+g, admin, anonymous
+g, ccoe1919, device
+g, ccoe1919, anonymous

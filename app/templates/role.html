@@ -156,8 +156,8 @@ function datatable(){
 };
 /* list all data*/
 function list(){
-    url = "/user/role"
-    $.post(url,function(data){
+    url = "/user/roleinfo"
+    $.get(url,function(data){
        if (data['code']== 0){       
            var str = ''
            $.each(data.result,function(k,v){   
@@ -182,9 +182,9 @@ function list(){
 list()
 /*列出权限的信息，并拼接成复选框*/
 function powerlist(){
-    var url = "/role/getperm"
+    var url = "/user/getperm"
     $.get(url, function(data){
-        //console.log(data)
+        console.log(data)
         if (data['code']== 0){
             var str = ''
             $.each(data.result, function(k,v){
@@ -217,7 +217,7 @@ $("#addForm").Validform({
 /*用户添加*/
 $('#addForm').on('submit',function(){
         var str = $('#addForm').serialize()
-        $.post('/role/addrole',str,function(data){
+        $.post('/user/addrole',str,function(data){
             console.log(data)
             if (data['code']==0){
                      swal({
@@ -242,7 +242,7 @@ $('#addForm').on('submit',function(){
 /*点击按钮，显示更新用户模态窗,并获取用户的信息*/
 $("tbody").on('click','.update-btn',function(){
     var id = $(this).attr('data-id')
-    var url = "/role/getrole?id="+id
+    var url = "/user/getrole?id="+id
     $.get(url,function(data){
 
       console.log(data)
@@ -261,7 +261,7 @@ $("tbody").on('click','.update-btn',function(){
 
 /*获取角色所具备的权限，拼接为下拉列表*/
 function s_powerlist(id){
-    var url = "/role/getperm?id="+id
+    var url = "/user/getperm?id="+id
     $.get(url, function(data){
         //console.log(data)
         var str=''
@@ -285,7 +285,7 @@ function s_powerlist(id){
 /*更新用户信息*/
 $('#updateForm').on('submit',function(){
         var str = $('#updateForm').serialize()
-        $.post('/role/addrole',str, function(data){  // data is string
+        $.post('/user/addrole',str, function(data){  // data is string
 
             console.log(data)
             if (data['code']==0){   
@@ -309,7 +309,7 @@ $('#updateForm').on('submit',function(){
 $("tbody").on('click','.delete-btn',function(){
 	if(confirm("是否确认删除？")){
 		var id = $(this).attr('data-id')
-		var url =  "/role/delrole?id="+id
+		var url =  "/user/delrole?id="+id
         console.log(url)
 		$.getJSON(url,function(data){
 			if (data['code']== 0 ){

@@ -7,6 +7,7 @@
  @Desc  :
 """
 from flask import render_template, session, request
+from flask_login import login_required
 
 from app import db
 from app.form.server import AddServerForm, UpdateServerForm
@@ -17,10 +18,12 @@ from app.model.server import Server
 from app.view import web
 
 @web.route("/cmdb/server")
+@login_required
 def serv_index():
     return render_template("server.html", info=session)
 
 @web.route("/cmdb/getserver")
+@login_required
 def get_server():
     get_s = Server.query.all()
     res_s = [model_serializable(s) for s in get_s]
@@ -28,6 +31,7 @@ def get_server():
 
 
 @web.route("/cmdb/addserver", methods=["POST", "GET"])
+@login_required
 def add_server():
     if request.method == "GET":
         """
@@ -49,6 +53,7 @@ def add_server():
 
 
 @web.route("/cmdb/updateserver", methods=["POST", "GET"])
+@login_required
 def update_server():
     if request.method == "GET":
         id = request.args.get("id")

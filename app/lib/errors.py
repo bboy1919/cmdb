@@ -9,7 +9,9 @@
 import json
 
 from flask import request
+from flask_login._compat import text_type
 from werkzeug.exceptions import HTTPException
+from werkzeug.utils import escape
 
 
 class APIException(HTTPException):
@@ -28,17 +30,28 @@ class APIException(HTTPException):
         super(APIException, self).__init__(msg, None)
 
     def get_body(self, environ=None):
-        body = dict(
-            msg=self.msg,
-            error_code=self.error_code,
-            request=request.method + '  ' + self.get_url_no_param()
+        body= text_type(
+            (
+                u'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n'
+                u"<title>%(code)s</title>\n"
+                u"<h1>%(err_code)s</h1>\n"
+                u"%(description)s\n"
+            )
+            % {
+                "code": self.code,
+                "err_code": self.error_code,
+                "description": self.get_description(environ),
+            }
         )
-        text = json.dumps(body)
-        return text
+        return body
 
     def get_headers(self, environ=None):
         """Get a list of headers."""
-        return [('Content-Type', 'application/json')]
+        return [('Content-Type', 'text/html; charset=utf-8')]
+
+    def get_description(self, environ=None):
+        """Get the description."""
+        return u"<p>%s</p>" % escape(self.msg)
 
     @staticmethod
     def get_url_no_param():

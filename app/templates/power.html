@@ -89,7 +89,7 @@
     <div class="control-group">
 		<label class ="control-label col-sm-3">URL: </label> 
 		<div class="col-sm-9">
-         <input type="text" id="upurl" name="url" class="form-control"  datatype="*" errormsg="不能为空" />
+         <input type="text" id="upurl" name="url" class="form-control"  datatype="*" errormsg="不能为空" readonly/>
 		</div >   
 	</div> <!--URL-->
     <div class="control-group">
@@ -154,15 +154,15 @@ function datatable(){
 };
 /* list all data*/
 function list(){
-    url = "/user/power"
-    $.post(url,function(data){
+    url = "/user/powerinfo"
+    $.get(url,function(data){
        if (data['code']== 0){       
            var str = ''
            $.each(data.result,function(k,v){   
                str +='<tr class="odd gradeX">'+  
                '<td>'+v['name']+'</td>'+  
                '<td>'+v['name_cn']+'</td>'+  
-               '<td>'+v['url']+'</td>'+  
+               '<td>'+v['url']+'</td>'+
                '<td>'+v['comment']+'</td>'+ 
                '<td>'+
                '<button class="btn btn-primary btn-sm update-btn" data-id="'+v['id']+'">更新</button>'+
@@ -194,7 +194,7 @@ $("#addForm").Validform({
 /*用户添加*/
 $('#addForm').on('submit',function(){
         var str = $('#addForm').serialize()
-        $.post('/perm/addperm',str,function(data){
+        $.post('/user/addperm',str,function(data){
 
             console.log(data)
             if (data['code']==0){
@@ -220,7 +220,7 @@ $('#addForm').on('submit',function(){
 /*点击按钮，显示更新用户模态窗,并获取用户的信息*/
 $("tbody").on('click','.update-btn',function(){
     var id = $(this).attr('data-id')
-    var url = "/perm/getperm?id="+id
+    var url = "/user/getperm?id="+id
     $.get(url,function(data){
       console.log(data)
       if (data['code']==0){
@@ -240,7 +240,7 @@ $("tbody").on('click','.update-btn',function(){
 /*更新用户信息*/
 $('#updateForm').on('submit',function(){
         var str = $('#updateForm').serialize()
-        $.post('/perm/addperm',str, function(data){  // data is string
+        $.post('/user/addperm',str, function(data){  // data is string
             console.log(data)
             if (data['code']==0){   
             swal({
@@ -263,7 +263,7 @@ $('#updateForm').on('submit',function(){
 $("tbody").on('click','.delete-btn',function(){
 	if(confirm("是否确认删除？")){
 		var id = $(this).attr('data-id')
-		var url =  "/perm/delperm?id="+id
+		var url =  "/user/delperm?id="+id
         console.log(url)
 		$.get(url,function(data){
 			if (data['code']== 0 ){

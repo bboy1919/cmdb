@@ -7,6 +7,7 @@
  @Desc  :
 """
 from flask import render_template, session, request
+from flask_login import login_required
 
 from app import db
 from app.form.cabinet import AddCabinetForm, UpdateCabinetForm
@@ -18,11 +19,13 @@ from app.lib.helper import model_serializable, err_list
 
 
 @web.route("/cmdb/cabinet")
+@login_required
 def cabinet_index():
     return render_template("cabinet.html",info=session)
 
 
 @web.route("/cmdb/getcabinet")
+@login_required
 def get_cabinet():
     res = []
     cab_list = Cabinet.query.all()
@@ -31,6 +34,7 @@ def get_cabinet():
     return data_return(result=res)
 
 @web.route("/cmdb/addcabinet", methods=["GET", "POST"])
+@login_required
 def add_cabinet():
     if request.method == "GET":
         res=[]
@@ -50,6 +54,7 @@ def add_cabinet():
 
 
 @web.route("/cmdb/updatecabinet", methods=["GET", "POST"])
+@login_required
 def update_cabinet():
     if request.method == "GET":
         id = request.args.get("id")
@@ -70,6 +75,7 @@ def update_cabinet():
 
 
 @web.route("/cmdb/delcabinet")
+@login_required
 def del_cabinet():
     id = request.args.get("id")
     del_cab = Cabinet.query.filter(Cabinet.id == id).first_or_404()

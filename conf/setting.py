@@ -7,4 +7,6 @@
  @Desc  :
 """
 DEBUG = True
+
+# 用于是否启用zabbix
 ZABBIX_ENABLE = False

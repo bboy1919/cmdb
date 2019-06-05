@@ -12,29 +12,26 @@ from flask_login import login_required
 
 from app import db
 from app.form.role import AddRoleForm, UpdateRoleForm
+from app.lib.casbin_api import ret_all_groups, file_adapter, ret_all_policy
 from app.lib.helper import model_serializable, err_list
 from app.lib.re_data import data_return
 from app.model.permision import Permission
 from app.view import web
 from app.model.role import Role
 
-@web.route("/user/role", methods=['GET','POST'])
+@web.route("/user/role")
 @login_required
 def role_list():
-    if request.method == "GET":
-        return render_template("role.html", info=session)
+    return render_template("role.html", info=session)
+
+
+@web.route("/user/roleinfo")
+@login_required
+def role_info():
     result = []
     r_l = Role.query.all()
 
     for role in r_l:
-        # tmp = {}
-        # tmp["id"] = role.id
-        # tmp["name"] = role.name
-        # tmp["name_cn"] = role.name_cn
-        # tmp["info"] = role.info
-        # t =role.permission
-        # x = [p.name for p in t]
-        # tmp["p_id"] = ",".join(x)
         res = model_serializable(role)
         res["permission"] = ",".join([p["name"] for p in res["permission"]])
         result.append(res)
@@ -42,17 +39,16 @@ def role_list():
     return data_return(result=result)
 
 
-@web.route("/role/getrole", methods=["GET","POST"])
+@web.route("/user/getrole")
 @login_required
 def get_role():
-    if request.method == "GET":
-        uid = int(request.args.get("id"))
-        role_item = Role.query.filter(Role.id==uid).first_or_404()
-        e = model_serializable(role_item)
-        return data_return(result=e)
+    uid = int(request.args.get("id"))
+    role_item = Role.query.filter(Role.id==uid).first_or_404()
+    e = model_serializable(role_item)
+    return data_return(result=e)
 
 
-@web.route("/role/getperm")
+@web.route("/user/getperm")
 @login_required
 def get_perm():
     id = request.args.get("id")
@@ -66,7 +62,7 @@ def get_perm():
     return data_return(result=perm_l)
 
 
-@web.route("/role/addrole", methods=["POST"])
+@web.route("/user/addrole", methods=["POST"])
 @login_required
 def add_role():
     res_data = request.form
@@ -77,6 +73,7 @@ def add_role():
     else:
         r_data = AddRoleForm(request.form)
         role = Role()
+
     r_data.p_id.choices = Permission.all_permission()
     ob_perm = Permission.choiced_permission_item(r_data.p_id.data)
     if r_data.validate():
@@ -84,11 +81,20 @@ def add_role():
             role.set_attrs(r_data.data)
             role.permission = ob_perm
             db.session.add(role)
+
+        # 添加角色权限到ACL
+        ugp = []
+        for p in ob_perm:
+            ugp.append([p.url+"/*", "*"])
+        update_group_policy = ret_all_policy()
+        update_group_policy[role.name] = ugp
+        file_adapter.change_policy("p", update_group_policy)
+
         return data_return()
     else:
         return data_return(code=1,errmsg=err_list(r_data))
 
-@web.route("/role/delrole")
+@web.route("/user/delrole")
 @login_required
 def update_role():
     id = request.args.get("id")

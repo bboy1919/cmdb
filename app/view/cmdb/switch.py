@@ -7,6 +7,7 @@
  @Desc  :
 """
 from flask import render_template, session, request
+from flask_login import login_required
 
 from app import db
 from app.form.switch import AddSwitchForm, UpdateSwitchForm
@@ -18,11 +19,13 @@ from app.lib.helper import model_serializable, err_list
 
 
 @web.route("/cmdb/switch")
+@login_required
 def switch_index():
     return render_template("switch.html",info=session)
 
 
 @web.route("/cmdb/getswitch")
+@login_required
 def get_switch():
     all_switch_item = Switch.query.all()
     result = [model_serializable(s) for s in all_switch_item]
@@ -30,6 +33,7 @@ def get_switch():
 
 
 @web.route("/cmdb/addswitch", methods=["POST","GET"])
+@login_required
 def add_switch():
     if request.method == "GET":
         """
@@ -51,6 +55,7 @@ def add_switch():
 
 
 @web.route("/cmdb/updateswitch", methods=["POST", "GET"])
+@login_required
 def update_switch():
     if request.method == "GET":
         id = request.args.get("id")
@@ -67,6 +72,7 @@ def update_switch():
 
 
 @web.route("/cmdb/delswitch")
+@login_required
 def del_switch():
     id = request.args.get("id")
     del_sw = Switch.query.filter(Switch.id==id).first_or_404()

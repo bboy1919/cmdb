@@ -6,7 +6,7 @@
  @Date  : 2019/5/30
  @Desc  :
 """
-from zabbix_client import ZabbixServerProxy
+from .zabbix_client import ZabbixServerProxy
 
 from app import db
 from app.model.server import Server
